@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Main from "../components/Main";
-import { RiRadioButtonFill } from "react-icons/ri";
 import { GoPlus } from "react-icons/go";
+import { RiRadioButtonFill } from "react-icons/ri";
 import DaumPostcodeEmbed from "react-daum-postcode";
 
 const Container = styled.div`
@@ -77,9 +77,18 @@ const SearchFrame = styled.div`
   flex-direction: column;
 `;
 
-const TextBoxFrame = styled.div`
+const TextBoxSpace = styled.div`
   display: flex;
   flex-direction: row;
+`;
+
+const TextBoxSpace2 = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const TextBoxFrame = styled.div`
+  display: flex;
   align-items: center;
   margin-top: 10px;
 `;
@@ -96,10 +105,15 @@ const TextBox = styled.input`
   width: 400px;
   height: 60px;
   border: solid 1px #dbdbdb;
-  transition: border 0.5s ease;
+  border-radius: 3px;
 
   &:hover {
     border: solid 0.5px #dbdbdb;
+  }
+
+  &:focus {
+    border: solid 1.5px #222222;
+    outline: none;
   }
 `;
 
@@ -129,16 +143,98 @@ const SearchBtn = styled.button`
   }
 `;
 
+const AddressFrame = styled.div`
+  width: 100%;
+  height: 120px;
+  border: solid 1px #eeeeee;
+  border-radius: 4px;
+  background-color: #fcfcfc;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+`;
+
+const AddressBox = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const AdressRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 4px 0 4px 0;
+`;
+
+const AdressBox2 = styled.div`
+  width: 60px;
+  height: 32px;
+  background-color: salmon;
+  border: none;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: rgb(101, 101, 101);
+  background-color: rgb(245, 245, 245);
+  font-size: 15px;
+`;
+
 const BoxInfoMap = styled.div`
-  width: 500px;
+  width: 470px;
   height: 350px;
   border: solid 1px;
   display: flex;
   align-items: center;
+  flex-direction: column;
   justify-content: center;
   background-color: #fcfcfc;
   border: solid 2px #ededed;
   border-radius: 3px;
+  position: relative;
+  color: #656573;
+  font-weight: bold;
+`;
+
+const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+`;
+
+const Modal = styled.div`
+  width: 500px;
+  height: 550px;
+  background-color: white;
+  position: relative;
+  display: flex;
+`;
+
+const ModalCloseBtn = styled.button`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+`;
+
+const ContentContainer = styled.div`
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
 `;
 
 const DropdownContainer = styled.div`
@@ -197,10 +293,12 @@ const ImageBtn = styled.button`
 `;
 
 const TextArea = styled.textarea`
+  width: 100%;
+  height: 250px;
   padding: 20px;
   font-size: 18px;
   border: solid 1px #dbdbdb;
-  transition: border 0.5s ease;
+  border-radius: 4px;
   line-height: 1.6;
   resize: none;
 
@@ -212,6 +310,11 @@ const TextArea = styled.textarea`
   &::placeholder {
     white-space: pre-wrap;
     text-indent: 0;
+  }
+
+   &:focus {
+    border: solid 1.5px #222222;
+    outline: none;
   }
 `;
 
@@ -227,16 +330,16 @@ const RegistrationBtnSpace = styled.div`
   algin-items: center;
   justify-content: center;
   padding: 100px 0 100px 0;
-`
+`;
 
 const RegistrationBtn = styled.button`
   width: 220px;
   height: 80px;
-  color:white;
+  color: white;
   font-size: 19px;
   font-weight: bold;
   cursor: pointer;
-  background-color: #FE8C12;
+  background-color: #fe8c12;
   border: none;
   border-radius: 3px;
   display: flex;
@@ -246,26 +349,65 @@ const RegistrationBtn = styled.button`
   &:hover {
     background-color: #f08e24;
   }
-`
+`;
 
 const PlusIcon = styled(GoPlus)`
   font-size: 24px;
   position: absolute;
   left: 30px;
   top: 12px;
-`
+`;
 
-const Modal = styled.div`
-  width: 500px;
-  height: 500px;
-  border: solid 1px;
-  z-index: 100;
-position: absolute;
-top: 50px;
-left: 250px;
-`
+const BoxInfo2 = styled.div`
+  width: 88%;
+  height: 100%;
+  padding: 25px;
+  display: flex;
+`;
+
+const SearchFrame2 = styled.div`
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+`;
+
+const TextBoxFrame2 = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 10px;
+`;
+
+const TextBoxContainer2 = styled.div`
+  position: relative;
+  display: inline-block;
+  width: 100%;
+`;
+
+const TextBox2 = styled.input`
+  padding-left: 20px;
+  padding-right: 40px;
+  font-size: 18px;
+  width: 100%;
+  height: 60px;
+  border: solid 1px #dbdbdb;
+  border-radius: 4px;
+
+  &:hover {
+    border: solid 0.5px #dbdbdb;
+  }
+
+  &:focus {
+    border: solid 1.5px #222222;
+    outline: none;
+  }
+`;
 
 const RegistrationContent = () => {
+  const [postCode, setPostCode] = useState("");
+  const [jibunAddress, setJibunAddress] = useState("");
+  const [modal, setModal] = useState(false);
   const [selectedFloor, setSelectedFloor] = useState("");
   const [selectedSecondFloor, setSelectedSecondFloor] = useState("");
   const [elevator, setElevator] = useState("없음");
@@ -274,37 +416,60 @@ const RegistrationContent = () => {
   const [areaPyeong, setAreaPyeong] = useState("");
   const [areaSquareMeter, setAreaSquareMeter] = useState("");
   const [roomCount, setRoomCount] = useState("");
-  const [postCode, setPostCode] = useState("");
-  const [modal, setModal] = useState(false);
+  const [dong, setDong] = useState("");
+  const [ho, setHo] = useState("");
+  const [addressSelected, setAddressSelected] = useState(false);
+  const [maintenanceFee, setMaintenanceFee] = useState("");
+  const [deposit, setDeposit] = useState("");
+  const [monthlyRent, setMonthlyRent] = useState("");
+  const [hasMaintenanceFee, setHasMaintenanceFee] = useState("없음");
 
-  const handleFirstDropdownChange = (e) => {
-    setSelectedFloor(e.target.value);
-    setSelectedSecondFloor("");
-  };
+  const processedPlaceholder = `매물 상세 페이지에 노출되는 문구입니다. 
+  1000자 이내로 작성해주세요.`.replace(/\n\s+/g, "\n");
 
-  const renderOptions = (count) => {
-    return Array.from({ length: count }, (_, index) => (
-      <Option key={index + 1} value={index + 1}>
-        {index + 1}층
-      </Option>
-    ));
-  };
+  useEffect(() => {
+    if (postCode) {
+      const geocoder = new window.kakao.maps.services.Geocoder();
 
-  const handleTitleChange = (e) => {
-    const { value } = e.target;
-    if (value.length <= 40) {
-      setTitle(value);
+      geocoder.addressSearch(postCode, (result, status) => {
+        if (status === window.kakao.maps.services.Status.OK) {
+          const container = document.getElementById("map");
+          const options = {
+            center: new window.kakao.maps.LatLng(result[0].y, result[0].x),
+            level: 3,
+          };
+          const map = new window.kakao.maps.Map(container, options);
+          const marker = new window.kakao.maps.Marker({
+            position: new window.kakao.maps.LatLng(result[0].y, result[0].x),
+          });
+          marker.setMap(map);
+        }
+      });
     }
+  }, [postCode]);
+
+  const handleSelectComplete = (data) => {
+    setPostCode(data.address); // 도로명 주소
+    setJibunAddress(data.jibunAddress); // 지번 주소
+    setModal(false);
+    setAddressSelected(true);
   };
 
-  const handleDescriptionChange = (e) => {
-    const { value } = e.target;
-    if (value.length <= 1000) {
-      setDescription(value);
+  useEffect(() => {
+    //모달창 열린 후 스크롤이 보이지 않도록
+    if (modal) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
     }
-  };
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [modal]);
 
   const handleAreaPyeongChange = (e) => {
+    // 평을 m²으로
     const { value } = e.target;
     if (value === "" || /^[0-9\b]+$/.test(value)) {
       setAreaPyeong(value);
@@ -317,6 +482,7 @@ const RegistrationContent = () => {
   };
 
   const handleAreaSquareMeterChange = (e) => {
+    // m²을 평으로
     const { value } = e.target;
     if (value === "" || /^[0-9\b]+$/.test(value)) {
       setAreaSquareMeter(value);
@@ -329,34 +495,104 @@ const RegistrationContent = () => {
   };
 
   const handleRoomCountChange = (e) => {
+    // 숫자만 입력이 가능하도록
     const { value } = e.target;
     if (value === "" || /^[0-9\b]+$/.test(value)) {
       setRoomCount(value);
     }
   };
 
-  const handleSelectComplete = (data) => {
-    const adress = data.adress;
-    setPostCode(adress);
-    setModal(false);
-    console.log(adress);
-  }
+  const handleDongChange = (e) => {
+    // 동 입력 숫자만
+    const { value } = e.target;
+    if (value === "" || /^[0-9\b]+$/.test(value)) {
+      setDong(value);
+    }
+  };
+
+  const handleDepositChange = (e) => {
+    const { value } = e.target;
+    if (value === "" || /^[0-9\b]+$/.test(value)) {
+      setDeposit(value);
+    }
+  };
+
+  const handleMonthlyRentChange = (e) => {
+    const { value } = e.target;
+    if (value === "" || /^[0-9\b]+$/.test(value)) {
+      setMonthlyRent(value);
+    }
+  };
+
+  const handleMaintenanceFeeChange = (e) => {
+    const { value } = e.target;
+    if (value === "" || /^[0-9\b]+$/.test(value)) {
+      setMaintenanceFee(value);
+    }
+  };
+
+  const handleHoChange = (e) => {
+    // 호 입력 숫자만
+    const { value } = e.target;
+    if (value === "" || /^[0-9\b]+$/.test(value)) {
+      setHo(value);
+    }
+  };
+
+  const handleFirstDropdownChange = (e) => {
+    setSelectedFloor(e.target.value);
+    setSelectedSecondFloor("");
+  };
+
+  const renderOptions = (count) => {
+    // 층에 대한 반복문
+    return Array.from({ length: count }, (_, index) => (
+      <Option key={index + 1} value={index + 1}>
+        {index + 1}층
+      </Option>
+    ));
+  };
+
+  const handleTitleChange = (e) => {
+    // 40글자 수 제한
+    const { value } = e.target;
+    if (value.length <= 40) {
+      setTitle(value);
+    }
+  };
+
+  const handleDescriptionChange = (e) => {
+    // 1000글자 수 제한
+    const { value } = e.target;
+    if (value.length <= 1000) {
+      setDescription(value);
+    }
+  };
 
   return (
     <Container>
-    
       {modal && (
-        <Modal>
-        <DaumPostcodeEmbed style={{ width: "100%", height: "100%" }}
-          onComplete={handleSelectComplete}/>
-        </Modal>
+        <ModalOverlay>
+          <Modal>
+            <ModalCloseBtn onClick={() => setModal(false)}>X</ModalCloseBtn>
+            <ContentContainer>
+              <DaumPostcodeEmbed
+                style={{ width: "100%", height: "93%" }}
+                onComplete={handleSelectComplete}
+              />
+            </ContentContainer>
+          </Modal>
+        </ModalOverlay>
       )}
-      
+
       <Frame>
         <TitleText>방 등록</TitleText>
         <InfoFrame>
           <InfoTitle>매물 정보</InfoTitle>
-          <h3><span style={{ color: "#FE8C12",marginRight: "4px"}}>*</span>필수입력 항목</h3>
+          <h3>
+            <span style={{ color: "#FE8C12", marginRight: "4px" }}>*</span>
+            필수입력 항목
+          </h3>
         </InfoFrame>
         <TopLine />
 
@@ -370,13 +606,70 @@ const RegistrationContent = () => {
               <h4>주소 검색</h4>
               <TextBoxFrame>
                 <TextBoxContainer>
-                  <TextBox placeholder="예) 번동 10-1, 강북구 번동" />
+                  <TextBox placeholder="예) 번동 10-1, 강북구 번동" disabled />
                 </TextBoxContainer>
-                <SearchBtn onClick={()=>{setModal(true)}}>검색</SearchBtn>
+                <SearchBtn onClick={() => setModal(true)}>검색</SearchBtn>
               </TextBoxFrame>
+
+              <AddressFrame>
+                <AddressBox>
+                  {postCode && (
+                    <AdressRow>
+                      <AdressBox2>도로명</AdressBox2>
+                      <p style={{ color: "#222222", paddingLeft: "10px" }}>
+                        {postCode}
+                      </p>
+                    </AdressRow>
+                  )}
+                  {jibunAddress && (
+                    <AdressRow>
+                      <AdressBox2>지번</AdressBox2>
+                      <p style={{ color: "#222222", paddingLeft: "10px" }}>
+                        {jibunAddress}
+                      </p>
+                    </AdressRow>
+                  )}
+                </AddressBox>
+              </AddressFrame>
+
+              <TextBoxSpace>
+                <TextBoxSpace2>
+                  <h4 style={{ paddingTop: "20px" }}>동 입력</h4>
+                  <TextBoxFrame>
+                    <TextBoxContainer style={{ marginRight: "20px" }}>
+                      <TextBox
+                        style={{ width: "180px" }}
+                        placeholder="예) 101"
+                        value={dong}
+                        onChange={handleDongChange}
+                        disabled={!addressSelected}
+                      />
+                      <Unit>동</Unit>
+                    </TextBoxContainer>
+                  </TextBoxFrame>
+                </TextBoxSpace2>
+
+                <TextBoxSpace2>
+                  <h4 style={{ paddingTop: "20px" }}>호 입력</h4>
+                  <TextBoxFrame>
+                    <TextBoxContainer>
+                      <TextBox
+                        style={{ width: "180px" }}
+                        placeholder="예) 101"
+                        value={ho}
+                        onChange={handleHoChange}
+                        disabled={!addressSelected}
+                      />
+                      <Unit>호</Unit>
+                    </TextBoxContainer>
+                  </TextBoxFrame>
+                </TextBoxSpace2>
+              </TextBoxSpace>
             </SearchFrame>
-            <BoxInfoMap>
-              <span>주소를 검색하시면 해당 위치가 지도에 표시됩니다.</span>
+
+            <BoxInfoMap id="map">
+              <p style={{ marginBottom: "10px" }}>주소를 검색하시면</p>
+              <p>해당 위치가 지도에 표시됩니다.</p>
             </BoxInfoMap>
           </BoxInfo>
         </BoxFrame>
@@ -386,6 +679,7 @@ const RegistrationContent = () => {
             <h4>매물 크기</h4>
             <span style={{ color: "#FE8C12", marginLeft: "4px" }}>*</span>
           </BoxName>
+
           <BoxInfo>
             <SearchFrame>
               <h4>전용 면적</h4>
@@ -399,9 +693,11 @@ const RegistrationContent = () => {
                   />
                   <Unit>평</Unit>
                 </TextBoxContainer>
+
                 <span style={{ fontWeight: "bold", padding: "10px 10px" }}>
                   =
                 </span>
+
                 <TextBoxContainer>
                   <TextBox
                     style={{ width: "150px" }}
@@ -421,6 +717,7 @@ const RegistrationContent = () => {
             <h4>방 정보</h4>
             <span style={{ color: "#FE8C12", marginLeft: "4px" }}>*</span>
           </BoxName>
+
           <BoxInfo>
             <SearchFrame>
               <h4>방 수</h4>
@@ -439,6 +736,102 @@ const RegistrationContent = () => {
         </BoxFrame>
 
         <InfoFrame>
+          <InfoTitle>거래 정보</InfoTitle>
+        </InfoFrame>
+        <TopLine />
+
+        <BoxFrame>
+          <BoxName>
+            <h4>가격 정보</h4>
+          </BoxName>
+
+          <BoxInfo>
+            <TextBoxSpace>
+              <TextBoxSpace2>
+                <h4>보증금</h4>
+                <TextBoxFrame>
+                  <TextBoxContainer style={{ marginRight: "30px" }}>
+                    <TextBox
+                      style={{ width: "200px" }}
+                      value={deposit}
+                      onChange={handleDepositChange}
+                    />
+                    <Unit>만원</Unit>
+                  </TextBoxContainer>
+                </TextBoxFrame>
+              </TextBoxSpace2>
+
+              <TextBoxSpace2>
+                <h4>월세</h4>
+                <TextBoxFrame>
+                  <TextBoxContainer>
+                    <TextBox
+                      style={{ width: "200px" }}
+                      value={monthlyRent}
+                      onChange={handleMonthlyRentChange}
+                    />
+                    <Unit>만원</Unit>
+                  </TextBoxContainer>
+                </TextBoxFrame>
+              </TextBoxSpace2>
+            </TextBoxSpace>
+          </BoxInfo>
+        </BoxFrame>
+
+        <BoxFrame>
+          <BoxName>
+            <h4>공용관리비</h4>
+          </BoxName>
+
+          <BoxInfo>
+            <TextBoxSpace>
+              <TextBoxSpace2>
+                <h4>관리비 여부</h4>
+                <TextBoxFrame>
+                  <RadioGroup
+                    style={{ marginRight: "20px", marginTop: "13px" }}
+                  >
+                    <RadioLabel onClick={() => setHasMaintenanceFee("없음")}>
+                      <RiRadioButtonFill
+                        color={
+                          hasMaintenanceFee === "없음" ? "#FE8C12" : "#ccc"
+                        }
+                        size={30}
+                      />
+                      없음
+                    </RadioLabel>
+                    <RadioLabel onClick={() => setHasMaintenanceFee("있음")}>
+                      <RiRadioButtonFill
+                        color={
+                          hasMaintenanceFee === "있음" ? "#FE8C12" : "#ccc"
+                        }
+                        size={30}
+                      />
+                      있음
+                    </RadioLabel>
+                  </RadioGroup>
+                </TextBoxFrame>
+              </TextBoxSpace2>
+
+              <TextBoxSpace2>
+                <h4>관리비</h4>
+                <TextBoxFrame>
+                  <TextBoxContainer>
+                    <TextBox
+                      style={{ width: "250px" }}
+                      value={maintenanceFee}
+                      onChange={handleMaintenanceFeeChange}
+                      disabled={hasMaintenanceFee === "없음"}
+                    />
+                    <Unit>원</Unit>
+                  </TextBoxContainer>
+                </TextBoxFrame>
+              </TextBoxSpace2>
+            </TextBoxSpace>
+          </BoxInfo>
+        </BoxFrame>
+
+        <InfoFrame>
           <InfoTitle>추가 정보</InfoTitle>
         </InfoFrame>
         <TopLine />
@@ -448,31 +841,42 @@ const RegistrationContent = () => {
             <h4>층 수</h4>
             <span style={{ color: "#FE8C12", marginLeft: "4px" }}>*</span>
           </BoxName>
+
           <BoxInfo>
             <SearchFrame>
-              <h4>전체층 수</h4>
-              <TextBoxFrame>
-                <DropdownContainer>
-                  <Dropdown
-                    value={selectedFloor}
-                    onChange={handleFirstDropdownChange}
-                  >
-                    <Option value="">선택</Option>
-                    {renderOptions(25)}
-                  </Dropdown>
-                </DropdownContainer>
-                <DropdownContainer style={{ marginLeft: "40px" }}>
-                  <Dropdown
-                    value={selectedSecondFloor}
-                    onChange={(e) => setSelectedSecondFloor(e.target.value)}
-                    disabled={!selectedFloor}
-                  >
-                    <Option value="">선택</Option>
-                    {selectedFloor &&
-                      renderOptions(parseInt(selectedFloor, 10))}
-                  </Dropdown>
-                </DropdownContainer>
-              </TextBoxFrame>
+              <TextBoxSpace>
+                <TextBoxSpace2>
+                  <h4>전체층 수</h4>
+                  <TextBoxFrame>
+                    <DropdownContainer>
+                      <Dropdown
+                        value={selectedFloor}
+                        onChange={handleFirstDropdownChange}
+                      >
+                        <Option value="">선택</Option>
+                        {renderOptions(25)}
+                      </Dropdown>
+                    </DropdownContainer>
+                  </TextBoxFrame>
+                </TextBoxSpace2>
+
+                <TextBoxSpace2>
+                  <h4 style={{ marginLeft: "40px" }}>해당층 수</h4>
+                  <TextBoxFrame>
+                    <DropdownContainer style={{ marginLeft: "40px" }}>
+                      <Dropdown
+                        value={selectedSecondFloor}
+                        onChange={(e) => setSelectedSecondFloor(e.target.value)}
+                        disabled={!selectedFloor}
+                      >
+                        <Option value="">선택</Option>
+                        {selectedFloor &&
+                          renderOptions(parseInt(selectedFloor, 10))}
+                      </Dropdown>
+                    </DropdownContainer>
+                  </TextBoxFrame>
+                </TextBoxSpace2>
+              </TextBoxSpace>
             </SearchFrame>
           </BoxInfo>
         </BoxFrame>
@@ -513,47 +917,37 @@ const RegistrationContent = () => {
 
         <BoxFrame>
           <BoxName>
-            <h4>난방 시설</h4>            
+            <h4>난방 시설</h4>
           </BoxName>
-          <BoxInfo>
-
-          </BoxInfo>
+          <BoxInfo></BoxInfo>
         </BoxFrame>
 
         <BoxFrame>
           <BoxName>
             <h4>냉방 시설</h4>
           </BoxName>
-          <BoxInfo>
-
-          </BoxInfo>
+          <BoxInfo></BoxInfo>
         </BoxFrame>
 
         <BoxFrame>
           <BoxName>
             <h4>생활 시설</h4>
           </BoxName>
-          <BoxInfo>
-
-          </BoxInfo>
+          <BoxInfo></BoxInfo>
         </BoxFrame>
 
         <BoxFrame>
           <BoxName>
             <h4>보안 시설</h4>
           </BoxName>
-          <BoxInfo>
-
-          </BoxInfo>
+          <BoxInfo></BoxInfo>
         </BoxFrame>
 
         <BoxFrame>
           <BoxName>
             <h4>기타 시설</h4>
           </BoxName>
-          <BoxInfo>
-
-          </BoxInfo>
+          <BoxInfo></BoxInfo>
         </BoxFrame>
 
         <InfoFrame>
@@ -568,7 +962,10 @@ const RegistrationContent = () => {
           </BoxName>
           <BoxInfo>
             <SearchFrame>
-              <ImageBtn><PlusIcon/>사진추가</ImageBtn>
+              <ImageBtn>
+                <PlusIcon />
+                사진추가
+              </ImageBtn>
             </SearchFrame>
           </BoxInfo>
         </BoxFrame>
@@ -580,24 +977,36 @@ const RegistrationContent = () => {
 
         <BoxFrame>
           <BoxName>
+            <h4>작성자</h4>
+          </BoxName>
+
+          <BoxInfo
+            style={{ fontSize: "18px", fontWeight: "bold", color: "#222222" }}
+          >
+            <p>현지훈</p>
+          </BoxInfo>
+        </BoxFrame>
+
+        <BoxFrame>
+          <BoxName>
             <h4>제목</h4>
             <span style={{ color: "#FE8C12", marginLeft: "4px" }}>*</span>
           </BoxName>
-          <BoxInfo>
-            <SearchFrame>
-              <TextBoxFrame>
-                <TextBoxContainer>
-                  <TextBox
-                    style={{ width: "100%" }}
+
+          <BoxInfo2>
+            <SearchFrame2>
+              <TextBoxFrame2>
+                <TextBoxContainer2>
+                  <TextBox2
                     placeholder="리스트에 노출되는 문구입니다. 40자 이내로 작성해주세요."
                     value={title}
                     onChange={handleTitleChange}
                   />
                   <CharCount>{title.length}/40</CharCount>
-                </TextBoxContainer>
-              </TextBoxFrame>
-            </SearchFrame>
-          </BoxInfo>
+                </TextBoxContainer2>
+              </TextBoxFrame2>
+            </SearchFrame2>
+          </BoxInfo2>
         </BoxFrame>
 
         <BoxFrame>
@@ -605,25 +1014,25 @@ const RegistrationContent = () => {
             <h4>상세설명</h4>
             <span style={{ color: "#FE8C12", marginLeft: "4px" }}>*</span>
           </BoxName>
-          <BoxInfo>
-            <SearchFrame>
-              <TextBoxFrame>
-                <TextBoxContainer>
+
+          <BoxInfo2>
+            <SearchFrame2>
+              <TextBoxFrame2>
+                <TextBoxContainer2>
                   <TextArea
-                    placeholder="매물 상세 페이지에 노출되는 문구입니다.
-                    1000자 이내로 작성해주세요."
+                    placeholder={processedPlaceholder}
                     value={description}
                     onChange={handleDescriptionChange}
                   />
                   <CharCount>{description.length}/1000</CharCount>
-                </TextBoxContainer>
-              </TextBoxFrame>
-            </SearchFrame>
-          </BoxInfo>
+                </TextBoxContainer2>
+              </TextBoxFrame2>
+            </SearchFrame2>
+          </BoxInfo2>
         </BoxFrame>
-        
+
         <RegistrationBtnSpace>
-        <RegistrationBtn>방 등록</RegistrationBtn>
+          <RegistrationBtn>방 등록</RegistrationBtn>
         </RegistrationBtnSpace>
       </Frame>
     </Container>
