@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Main from "../components/Main";
 import { GoPlus } from "react-icons/go";
 import { RiRadioButtonFill } from "react-icons/ri";
+import { FaCheck } from "react-icons/fa6";
 import DaumPostcodeEmbed from "react-daum-postcode";
 
 const Container = styled.div`
@@ -67,7 +68,7 @@ const BoxInfo = styled.div`
   height: 100%;
   padding: 25px;
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
 `;
 
 const SearchFrame = styled.div`
@@ -195,7 +196,8 @@ const BoxInfoMap = styled.div`
   background-color: #fcfcfc;
   border: solid 2px #ededed;
   border-radius: 3px;
-  position: relative;
+  position: absolute;
+  right: 20px;
   color: #656573;
   font-weight: bold;
 `;
@@ -268,6 +270,7 @@ const RadioLabel = styled.label`
   margin-right: 20px;
   font-size: 19px;
   cursor: pointer;
+  color: #222222;
   svg {
     margin-right: 5px;
   }
@@ -312,7 +315,7 @@ const TextArea = styled.textarea`
     text-indent: 0;
   }
 
-   &:focus {
+  &:focus {
     border: solid 1.5px #222222;
     outline: none;
   }
@@ -423,6 +426,12 @@ const RegistrationContent = () => {
   const [deposit, setDeposit] = useState("");
   const [monthlyRent, setMonthlyRent] = useState("");
   const [hasMaintenanceFee, setHasMaintenanceFee] = useState("없음");
+  const [heating, setHeating] = useState("선택 안함");
+  const [cooling, setCooling] = useState([]);
+  const [living, setLiving] = useState([]);
+  const [security, setSecurity] = useState([]);
+  const [others, setOthers] = useState([]);
+  const [images, setImages] = useState([]);
 
   const processedPlaceholder = `매물 상세 페이지에 노출되는 문구입니다. 
   1000자 이내로 작성해주세요.`.replace(/\n\s+/g, "\n");
@@ -553,6 +562,14 @@ const RegistrationContent = () => {
     ));
   };
 
+  const handleCheckboxChange = (list, setList, value) => {
+    setList(
+      list.includes(value)
+        ? list.filter((item) => item !== value)
+        : [...list, value]
+    );
+  };
+
   const handleTitleChange = (e) => {
     // 40글자 수 제한
     const { value } = e.target;
@@ -568,6 +585,71 @@ const RegistrationContent = () => {
       setDescription(value);
     }
   };
+
+  const handleImageChange = (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length + images.length <= 4) {
+      const newImages = files.map((file) => {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result);
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
+      });
+      Promise.all(newImages)
+        .then((results) =>
+          setImages((prevImages) => [...prevImages, ...results])
+        )
+        .catch((error) => console.error("Error reading files:", error));
+    } else {
+      alert("최대 4개의 이미지만 업로드할 수 있습니다.");
+    }
+  };
+
+  // 시설 정보 체크 박스에 대한 컴포넌트
+  const Checkbox = ({ label, checked, onChange }) => (
+    <CheckboxLabel>
+      <CheckboxInput type="checkbox" checked={checked} onChange={onChange} />
+      <CustomCheckbox checked={checked}>
+        {checked && <CheckIcon color="white" />}
+      </CustomCheckbox>
+      <LabelText>{label}</LabelText>
+    </CheckboxLabel>
+  );
+
+  const CheckboxLabel = styled.label`
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 19px;
+    margin-right: 27px;
+  `;
+
+  const CheckboxInput = styled.input`
+    display: none;
+  `;
+
+  const CustomCheckbox = styled.span`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    margin: 8px 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    background-color: ${(props) => (props.checked ? "#FE8C12" : "transparent")};
+  `;
+
+  const CheckIcon = styled(FaCheck)`
+    font-size: 14px;
+  `;
+
+  const LabelText = styled.div`
+    display: flex;
+    margin-left: 5px;
+  `;
 
   return (
     <Container>
@@ -919,35 +1001,164 @@ const RegistrationContent = () => {
           <BoxName>
             <h4>난방 시설</h4>
           </BoxName>
-          <BoxInfo></BoxInfo>
+          <BoxInfo>
+            <SearchFrame>
+              <TextBoxFrame>
+                <RadioGroup>
+                  <RadioLabel
+                    style={{ width: "120px" }}
+                    onClick={() => setHeating("선택 안함")}
+                  >
+                    <RiRadioButtonFill
+                      color={heating === "선택 안함" ? "#FE8C12" : "#ccc"}
+                      size={30}
+                    />
+                    선택 안함
+                  </RadioLabel>
+                  <RadioLabel
+                    style={{ width: "120px" }}
+                    onClick={() => setHeating("개별난방")}
+                  >
+                    <RiRadioButtonFill
+                      color={heating === "개별난방" ? "#FE8C12" : "#ccc"}
+                      size={30}
+                    />
+                    개별난방
+                  </RadioLabel>
+                  <RadioLabel
+                    style={{ width: "120px" }}
+                    onClick={() => setHeating("중앙난방")}
+                  >
+                    <RiRadioButtonFill
+                      color={heating === "중앙난방" ? "#FE8C12" : "#ccc"}
+                      size={30}
+                    />
+                    중앙난방
+                  </RadioLabel>
+                  <RadioLabel
+                    style={{ width: "120px" }}
+                    onClick={() => setHeating("지역난방")}
+                  >
+                    <RiRadioButtonFill
+                      color={heating === "지역난방" ? "#FE8C12" : "#ccc"}
+                      size={30}
+                    />
+                    지역난방
+                  </RadioLabel>
+                </RadioGroup>
+              </TextBoxFrame>
+            </SearchFrame>
+          </BoxInfo>
         </BoxFrame>
 
         <BoxFrame>
           <BoxName>
             <h4>냉방 시설</h4>
           </BoxName>
-          <BoxInfo></BoxInfo>
+          <BoxInfo>
+            <Checkbox
+              label="벽걸이형"
+              checked={cooling.includes("벽걸이형")}
+              onChange={() =>
+                handleCheckboxChange(cooling, setCooling, "벽걸이형")
+              }
+            />
+            <Checkbox
+              label="스탠드형"
+              checked={cooling.includes("스탠드형")}
+              onChange={() =>
+                handleCheckboxChange(cooling, setCooling, "스탠드형")
+              }
+            />
+            <Checkbox
+              label="천장형"
+              checked={cooling.includes("천장형")}
+              onChange={() =>
+                handleCheckboxChange(cooling, setCooling, "천장형")
+              }
+            />
+          </BoxInfo>
         </BoxFrame>
 
         <BoxFrame>
           <BoxName>
             <h4>생활 시설</h4>
           </BoxName>
-          <BoxInfo></BoxInfo>
+          <BoxInfo style={{ flexWrap: "wrap" }}>
+            {[
+              "침대",
+              "옷장",
+              "식탁",
+              "쇼파",
+              "신발장",
+              "냉장고",
+              "세탁기",
+              "건조기",
+              "샤워부스",
+              "욕조",
+              "비데",
+              "싱크대",
+              "식기세척기",
+              "가스레인지",
+              "인덕션",
+              "전자레인지",
+              "가스오븐",
+              "TV",
+              "붙박이장",
+            ].map((item) => (
+              <Checkbox
+                key={item}
+                label={item}
+                checked={living.includes(item)}
+                onChange={() => handleCheckboxChange(living, setLiving, item)}
+              />
+            ))}
+          </BoxInfo>
         </BoxFrame>
 
         <BoxFrame>
           <BoxName>
             <h4>보안 시설</h4>
           </BoxName>
-          <BoxInfo></BoxInfo>
+          <BoxInfo>
+            {[
+              "경비원",
+              "비디오폰",
+              "인터폰",
+              "카드키",
+              "CCTV",
+              "사설경비",
+              "현관보안",
+              "방범창",
+            ].map((item) => (
+              <Checkbox
+                key={item}
+                label={item}
+                checked={security.includes(item)}
+                onChange={() =>
+                  handleCheckboxChange(security, setSecurity, item)
+                }
+              />
+            ))}
+          </BoxInfo>
         </BoxFrame>
 
         <BoxFrame>
           <BoxName>
             <h4>기타 시설</h4>
           </BoxName>
-          <BoxInfo></BoxInfo>
+          <BoxInfo>
+            {["화재경보기", "베란다", "테라스", "마당", "무인택배함"].map(
+              (item) => (
+                <Checkbox
+                  key={item}
+                  label={item}
+                  checked={others.includes(item)}
+                  onChange={() => handleCheckboxChange(others, setOthers, item)}
+                />
+              )
+            )}
+          </BoxInfo>
         </BoxFrame>
 
         <InfoFrame>
@@ -956,20 +1167,47 @@ const RegistrationContent = () => {
         <TopLine />
 
         <BoxFrame>
-          <BoxName>
-            <h4>일반 사진</h4>
-            <span style={{ color: "#FE8C12", marginLeft: "4px" }}>*</span>
-          </BoxName>
-          <BoxInfo>
-            <SearchFrame>
-              <ImageBtn>
-                <PlusIcon />
-                사진추가
-              </ImageBtn>
-            </SearchFrame>
-          </BoxInfo>
-        </BoxFrame>
-
+      <BoxName>
+        <h4>일반 사진</h4>
+        <span style={{ color: "#FE8C12", marginLeft: "4px" }}>*</span>
+      </BoxName>
+      <BoxInfo>
+        <SearchFrame>
+          <ImageBtn onClick={() => document.getElementById("image-upload").click()}>
+            <PlusIcon />
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={handleImageChange}
+              style={{ display: "none" }}
+              id="image-upload"
+            />
+            <label htmlFor="image-upload" style={{ cursor: "pointer" }}>
+              사진추가
+            </label>
+          </ImageBtn>
+        </SearchFrame>
+        <div
+          style={{
+            marginTop: "12px",
+            display: "flex",
+            flexWrap: "wrap",
+            gap: "14px",
+          }}
+        >
+          {images.map((image, index) => (
+            <img
+              key={index}
+              src={image}
+              alt={`Uploaded ${index}`}
+              style={{ width: "320px", height: "200px", border: "solid 1px" }}
+            />
+          ))}
+        </div>
+      </BoxInfo>
+    </BoxFrame>
+    
         <InfoFrame>
           <InfoTitle>상세 설명</InfoTitle>
         </InfoFrame>
