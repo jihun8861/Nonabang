@@ -9,6 +9,8 @@ import SearchRoom from './pages/SearchRoom';
 import DetailRoom from './components/DetailRoom';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; // 스타일 파일 추가
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -22,11 +24,22 @@ root.render(
         <Route path="/SearchRoom" element={<SearchRoom/>} />
         <Route path="/DetailRoom" element={<DetailRoom/>} />
       </Routes>
+
+      <ToastContainer 
+        position="top-right" 
+        autoClose={4000} 
+        hideProgressBar={true}  // 진행 게이지 숨기기
+        newestOnTop={false} 
+        closeOnClick 
+        rtl={false} 
+        pauseOnFocusLoss 
+        draggable 
+        pauseOnHover
+        theme="colored"
+        style={{width:"600px", height:"200px", fontWeight:"bold", fontSize:"19px"}}
+      />
     </BrowserRouter>
   </React.StrictMode>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();

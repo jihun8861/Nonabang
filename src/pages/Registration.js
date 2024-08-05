@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import Main from "../components/Main";
 import { GoPlus } from "react-icons/go";
 import { RiRadioButtonFill } from "react-icons/ri";
 import { FaCheck } from "react-icons/fa6";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import DaumPostcodeEmbed from "react-daum-postcode";
 
 const Container = styled.div`
@@ -72,7 +74,7 @@ const BoxInfo = styled.div`
 `;
 
 const SearchFrame = styled.div`
-  width: 500px;
+  width: auto;
   height: auto;
   display: flex;
   flex-direction: column;
@@ -433,6 +435,19 @@ const RegistrationContent = () => {
   const [others, setOthers] = useState([]);
   const [images, setImages] = useState([]);
 
+  const addressRef = useRef(null);
+  const dongRef = useRef(null);
+  const areaSquareMeterRef = useRef(null);
+  const roomCountRef = useRef(null);
+  const depositRef = useRef(null);
+  const monthlyRentRef = useRef(null);
+  const maintenanceFeeRef = useRef(null);
+  const selectedFloorRef = useRef(null);
+  const selectedSecondFloorRef = useRef(null);
+  const imagesRef = useRef(null);
+  const titleRef = useRef(null);
+  const descriptionRef = useRef(null);
+
   const processedPlaceholder = `매물 상세 페이지에 노출되는 문구입니다. 
   1000자 이내로 작성해주세요.`.replace(/\n\s+/g, "\n");
 
@@ -586,25 +601,126 @@ const RegistrationContent = () => {
     }
   };
 
-  const handleImageChange = (e) => {
+  const handleImageChange = async (e) => {
+    e.preventDefault();
     const files = Array.from(e.target.files);
-    if (files.length + images.length <= 4) {
-      const newImages = files.map((file) => {
-        return new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onloadend = () => resolve(reader.result);
-          reader.onerror = reject;
-          reader.readAsDataURL(file);
-        });
-      });
-      Promise.all(newImages)
-        .then((results) =>
-          setImages((prevImages) => [...prevImages, ...results])
-        )
-        .catch((error) => console.error("Error reading files:", error));
+
+    if (files.length + images.length <= 5) {
+      try {
+        const newImages = await Promise.all(
+          files.map((file) => {
+            return new Promise((resolve, reject) => {
+              const reader = new FileReader();
+              reader.onloadend = () => resolve(reader.result);
+              reader.onerror = reject;
+              reader.readAsDataURL(file);
+            });
+          })
+        );
+
+        setImages((prevImages) => [...prevImages, ...newImages]);
+      } catch (error) {
+        console.error("Error reading files:", error);
+      }
     } else {
-      alert("최대 4개의 이미지만 업로드할 수 있습니다.");
+      alert("최대 5개의 이미지만 업로드할 수 있습니다.");
     }
+  };
+
+  const handleImageDelete = (index) => {
+    setImages((prevImages) => prevImages.filter((_, i) => i !== index));
+  };
+
+  const handleRegister = () => {
+    if (!addressSelected) {
+      toast.error("주소를 입력해주세요.");
+      addressRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+      return;
+    }
+    if (!dong) {
+      toast.error("동을 입력해주세요.");
+      dongRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+    if (!areaSquareMeter) {
+      toast.error("전용면적을 입력해주세요.");
+      areaSquareMeterRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+      return;
+    }
+    if (!roomCount) {
+      toast.error("방 수를 입력해주세요.");
+      roomCountRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+      return;
+    }
+    if (!deposit) {
+      toast.error("보증금을 입력해주세요.");
+      depositRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+      return;
+    }
+    if (!monthlyRent) {
+      toast.error("월세를 입력해주세요.");
+      roomCountRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+      return;
+    }
+    if (hasMaintenanceFee === "있음" && !maintenanceFee) {
+      toast.error("관리비 금액을 입력해주세요.");
+      maintenanceFeeRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+      return;
+    }
+    if (!selectedFloor) {
+      toast.error("전체층 수를 선택해주세요.");
+      selectedFloorRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+      return;
+    }
+    if (!selectedSecondFloor) {
+      toast.error("해당층 수를 선택해주세요.");
+      selectedSecondFloorRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+      return;
+    }
+    if (images.length === 0) {
+      toast.error("사진을 추가해주세요.");
+      imagesRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+    if (!title) {
+      toast.error("제목을 입력해주세요.");
+      titleRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+    if (!description) {
+      toast.error("상세설명을 입력해주세요.");
+      descriptionRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+      return;
+    }
+    // 등록 처리 로직
+    toast.success("방 등록이 완료되었습니다.");
   };
 
   // 시설 정보 체크 박스에 대한 컴포넌트
@@ -678,7 +794,7 @@ const RegistrationContent = () => {
         </InfoFrame>
         <TopLine />
 
-        <BoxFrame>
+        <BoxFrame ref={addressRef}>
           <BoxName>
             <h4>매물 주소</h4>
             <span style={{ color: "#FE8C12", marginLeft: "4px" }}>*</span>
@@ -718,7 +834,10 @@ const RegistrationContent = () => {
                 <TextBoxSpace2>
                   <h4 style={{ paddingTop: "20px" }}>동 입력</h4>
                   <TextBoxFrame>
-                    <TextBoxContainer style={{ marginRight: "20px" }}>
+                    <TextBoxContainer
+                      ref={dongRef}
+                      style={{ marginRight: "20px" }}
+                    >
                       <TextBox
                         style={{ width: "180px" }}
                         placeholder="예) 101"
@@ -732,7 +851,7 @@ const RegistrationContent = () => {
                 </TextBoxSpace2>
 
                 <TextBoxSpace2>
-                  <h4 style={{ paddingTop: "20px" }}>호 입력</h4>
+                  <h4 style={{ paddingTop: "20px" }}>호 입력(선택)</h4>
                   <TextBoxFrame>
                     <TextBoxContainer>
                       <TextBox
@@ -766,7 +885,7 @@ const RegistrationContent = () => {
             <SearchFrame>
               <h4>전용 면적</h4>
               <TextBoxFrame>
-                <TextBoxContainer>
+                <TextBoxContainer ref={areaSquareMeterRef}>
                   <TextBox
                     style={{ width: "150px" }}
                     placeholder="평수 입력"
@@ -804,7 +923,7 @@ const RegistrationContent = () => {
             <SearchFrame>
               <h4>방 수</h4>
               <TextBoxFrame>
-                <TextBoxContainer>
+                <TextBoxContainer ref={roomCountRef}>
                   <TextBox
                     style={{ width: "160px" }}
                     value={roomCount}
@@ -825,6 +944,7 @@ const RegistrationContent = () => {
         <BoxFrame>
           <BoxName>
             <h4>가격 정보</h4>
+            <span style={{ color: "#FE8C12", marginLeft: "4px" }}>*</span>
           </BoxName>
 
           <BoxInfo>
@@ -832,7 +952,10 @@ const RegistrationContent = () => {
               <TextBoxSpace2>
                 <h4>보증금</h4>
                 <TextBoxFrame>
-                  <TextBoxContainer style={{ marginRight: "30px" }}>
+                  <TextBoxContainer
+                    ref={depositRef}
+                    style={{ marginRight: "30px" }}
+                  >
                     <TextBox
                       style={{ width: "200px" }}
                       value={deposit}
@@ -846,7 +969,7 @@ const RegistrationContent = () => {
               <TextBoxSpace2>
                 <h4>월세</h4>
                 <TextBoxFrame>
-                  <TextBoxContainer>
+                  <TextBoxContainer ref={monthlyRentRef}>
                     <TextBox
                       style={{ width: "200px" }}
                       value={monthlyRent}
@@ -863,6 +986,7 @@ const RegistrationContent = () => {
         <BoxFrame>
           <BoxName>
             <h4>공용관리비</h4>
+            <span style={{ color: "#FE8C12", marginLeft: "4px" }}>*</span>
           </BoxName>
 
           <BoxInfo>
@@ -898,7 +1022,7 @@ const RegistrationContent = () => {
               <TextBoxSpace2>
                 <h4>관리비</h4>
                 <TextBoxFrame>
-                  <TextBoxContainer>
+                  <TextBoxContainer ref={maintenanceFeeRef}>
                     <TextBox
                       style={{ width: "250px" }}
                       value={maintenanceFee}
@@ -930,7 +1054,7 @@ const RegistrationContent = () => {
                 <TextBoxSpace2>
                   <h4>전체층 수</h4>
                   <TextBoxFrame>
-                    <DropdownContainer>
+                    <DropdownContainer ref={selectedFloorRef}>
                       <Dropdown
                         value={selectedFloor}
                         onChange={handleFirstDropdownChange}
@@ -945,7 +1069,10 @@ const RegistrationContent = () => {
                 <TextBoxSpace2>
                   <h4 style={{ marginLeft: "40px" }}>해당층 수</h4>
                   <TextBoxFrame>
-                    <DropdownContainer style={{ marginLeft: "40px" }}>
+                    <DropdownContainer
+                      ref={selectedSecondFloorRef}
+                      style={{ marginLeft: "40px" }}
+                    >
                       <Dropdown
                         value={selectedSecondFloor}
                         onChange={(e) => setSelectedSecondFloor(e.target.value)}
@@ -1166,48 +1293,104 @@ const RegistrationContent = () => {
         </InfoFrame>
         <TopLine />
 
-        <BoxFrame>
-      <BoxName>
-        <h4>일반 사진</h4>
-        <span style={{ color: "#FE8C12", marginLeft: "4px" }}>*</span>
-      </BoxName>
-      <BoxInfo>
-        <SearchFrame>
-          <ImageBtn onClick={() => document.getElementById("image-upload").click()}>
-            <PlusIcon />
-            <input
-              type="file"
-              accept="image/*"
-              multiple
-              onChange={handleImageChange}
-              style={{ display: "none" }}
-              id="image-upload"
-            />
-            <label htmlFor="image-upload" style={{ cursor: "pointer" }}>
-              사진추가
-            </label>
-          </ImageBtn>
-        </SearchFrame>
-        <div
-          style={{
-            marginTop: "12px",
-            display: "flex",
-            flexWrap: "wrap",
-            gap: "14px",
-          }}
-        >
-          {images.map((image, index) => (
-            <img
-              key={index}
-              src={image}
-              alt={`Uploaded ${index}`}
-              style={{ width: "320px", height: "200px", border: "solid 1px" }}
-            />
-          ))}
-        </div>
-      </BoxInfo>
-    </BoxFrame>
-    
+        <BoxFrame ref={imagesRef}>
+          <BoxName>
+            <h4>일반 사진</h4>
+            <span style={{ color: "#FE8C12", marginLeft: "4px" }}>*</span>
+          </BoxName>
+          <BoxInfo>
+            <SearchFrame>
+              <ImageBtn
+                onClick={() => document.getElementById("image-upload").click()}
+              >
+                <PlusIcon />
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={handleImageChange}
+                  style={{ display: "none" }}
+                  id="image-upload"
+                />
+                <label htmlFor="image-upload" style={{ cursor: "pointer" }}>
+                  사진추가
+                </label>
+              </ImageBtn>
+              <div
+                style={{
+                  marginTop: "25px",
+                  display: "flex",
+                  flexDirection: "row",
+                  flexWrap: "wrap",
+                  gap: "14px",
+                }}
+              >
+                {images.map((image, index) => (
+                  <div
+                    key={index}
+                    style={{
+                      position: "relative",
+                      width: "260px",
+                      height: "200px",
+                      border: "solid 1px #dfdfdf",
+                    }}
+                  >
+                    {index === 0 && (
+                      <span
+                        style={{
+                          position: "absolute",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          width: "80px",
+                          height: "40px",
+                          fontWeight: "bold",
+                          top: "8px",
+                          left: "8px",
+                          backgroundColor: "#FE8C12",
+                          color: "white",
+                          borderRadius: "4px",
+                          fontSize: "15px",
+                        }}
+                      >
+                        대표사진
+                      </span>
+                    )}
+                    <button
+                      onClick={() => handleImageDelete(index)}
+                      style={{
+                        position: "absolute",
+                        top: "8px",
+                        right: "8px",
+                        backgroundColor: "rgba(0, 0, 0, 0.5)",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "50%",
+                        width: "24px",
+                        height: "24px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        cursor: "pointer",
+                      }}
+                    >
+                      x
+                    </button>
+                    <img
+                      src={image}
+                      alt={`Uploaded ${index}`}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
+            </SearchFrame>
+          </BoxInfo>
+        </BoxFrame>
+
         <InfoFrame>
           <InfoTitle>상세 설명</InfoTitle>
         </InfoFrame>
@@ -1234,7 +1417,7 @@ const RegistrationContent = () => {
           <BoxInfo2>
             <SearchFrame2>
               <TextBoxFrame2>
-                <TextBoxContainer2>
+                <TextBoxContainer2 ref={titleRef}>
                   <TextBox2
                     placeholder="리스트에 노출되는 문구입니다. 40자 이내로 작성해주세요."
                     value={title}
@@ -1256,7 +1439,7 @@ const RegistrationContent = () => {
           <BoxInfo2>
             <SearchFrame2>
               <TextBoxFrame2>
-                <TextBoxContainer2>
+                <TextBoxContainer2 ref={descriptionRef}>
                   <TextArea
                     placeholder={processedPlaceholder}
                     value={description}
@@ -1270,7 +1453,7 @@ const RegistrationContent = () => {
         </BoxFrame>
 
         <RegistrationBtnSpace>
-          <RegistrationBtn>방 등록</RegistrationBtn>
+          <RegistrationBtn onClick={handleRegister}>방 등록</RegistrationBtn>
         </RegistrationBtnSpace>
       </Frame>
     </Container>
