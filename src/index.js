@@ -7,6 +7,7 @@ import SignUp from './pages/SignUp';
 import Registration from './pages/Registration';
 import SearchRoom from './pages/SearchRoom';
 import DetailRoom from './components/DetailRoom';
+import Mypage from './pages/Mypage';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ToastContainer } from "react-toastify";
@@ -23,6 +24,7 @@ root.render(
         <Route path="/Registration" element={<Registration/>} />
         <Route path="/SearchRoom" element={<SearchRoom/>} />
         <Route path="/DetailRoom" element={<DetailRoom/>} />
+        <Route path="/Mypage" element={<Mypage/>} />
       </Routes>
 
       <ToastContainer 
