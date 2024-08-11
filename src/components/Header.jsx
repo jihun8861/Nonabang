@@ -138,7 +138,7 @@ const Header = ({ isHome }) => {
                 <a href="/Registration">방등록</a>
               </li>
               <li>
-                <a href="#">찜한목록</a>
+                <a href="/Mypage/wishlist">찜한목록</a>
               </li>
             </ul>
           </MenuSection>

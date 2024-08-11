@@ -11,7 +11,7 @@ import Mypage from './pages/Mypage';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css"; // 스타일 파일 추가
+import "react-toastify/dist/ReactToastify.css";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -24,7 +24,7 @@ root.render(
         <Route path="/Registration" element={<Registration/>} />
         <Route path="/SearchRoom" element={<SearchRoom/>} />
         <Route path="/DetailRoom" element={<DetailRoom/>} />
-        <Route path="/Mypage" element={<Mypage/>} />
+        <Route path="/Mypage/*" element={<Mypage />} />
       </Routes>
 
       <ToastContainer 
