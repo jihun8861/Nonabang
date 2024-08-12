@@ -89,9 +89,9 @@ const ItemFrame = () => {
           <p>방을 등록하여 룸메이트를 구하자!</p>
           <Icon src="images/icon2.png"></Icon>
         </Item>
-        <Item>
+        <Item href="/Mypage/wishlist">
           <ItemTitleText>
-            <h1>찜한 방</h1>
+            <h1 >찜한 방</h1>
           </ItemTitleText>
           <p>찜한 방을 확인하세요</p>
           <p>나의 취향에 맞는 룸메이트가 여기에?</p>
