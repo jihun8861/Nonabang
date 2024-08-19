@@ -138,20 +138,31 @@ const FollowBoxContainerThinRow = styled.div`
 const FollowBox = () => {
   return (
     <FollowBoxContainer>
-      <FollowBoxContainerBoldRow style={{justifyContent:"space-between"}}>
-        <div style={{padding:"2% 2% 2% 2%", border:"1px solid black", display:"flex", alignItems:"center", justifyContent:"center"}}>매물번호 No.1323123</div><IoMdShare style={{fontSize:30}}/>
+      <FollowBoxContainerBoldRow style={{ justifyContent: "space-between" }}>
+        <div style={{ padding: "2%", border: "1px solid black", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          매물번호 No.1323123
+        </div>
+        <IoMdShare style={{ fontSize: 30 }} />
       </FollowBoxContainerBoldRow>
       <FollowBoxContainerBoldRow>
         <h2>월세 5000/50</h2>
       </FollowBoxContainerBoldRow>
       <FollowBoxContainerThinRow>
-        최근7일 조회수 10
+        최근 7일 조회수 10
       </FollowBoxContainerThinRow>
-      <FollowBoxContainerBoldRow style={{height:"150px", flexDirection:"row", justifyContent:"space-between"}}>
-        <div style={{width:"45%", height:"50%", display:"flex", alignItems:"center", justifyContent:"space-between", fontSize:30}}><IoHomeOutline /><h5 style={{fontSize:20}}>투룸</h5></div>
-        <div style={{width:"45%", height:"50%", display:"flex", alignItems:"center", justifyContent:"space-between", fontSize:30}}><TfiRulerAlt2 /><h5 style={{fontSize:20}}>27.72㎡</h5></div>
-        <div style={{width:"45%", height:"50%", display:"flex", alignItems:"center", justifyContent:"space-between", fontSize:30}}><PiElevatorLight /><h5 style={{fontSize:20}}>고층/3층</h5></div>
-        <div style={{width:"45%", height:"50%", display:"flex", alignItems:"center", justifyContent:"space-between", fontSize:30}}><GiMoneyStack /><h5 style={{fontSize:20}}>1만원</h5></div>
+      <FollowBoxContainerBoldRow style={{ height: "150px", flexDirection: "row", justifyContent: "space-between" }}>
+        <div style={{ width: "45%", height: "50%", display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: 30 }}>
+          <IoHomeOutline /><h5 style={{ fontSize: 20 }}>투룸</h5>
+        </div>
+        <div style={{ width: "45%", height: "50%", display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: 30 }}>
+          <TfiRulerAlt2 /><h5 style={{ fontSize: 20 }}>27.72㎡</h5>
+        </div>
+        <div style={{ width: "45%", height: "50%", display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: 30 }}>
+          <PiElevatorLight /><h5 style={{ fontSize: 20 }}>고층/3층</h5>
+        </div>
+        <div style={{ width: "45%", height: "50%", display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: 30 }}>
+          <GiMoneyStack /><h5 style={{ fontSize: 20 }}>1만원</h5>
+        </div>
       </FollowBoxContainerBoldRow>
       <FollowBoxContainerThinRow>
         <h4>방/욕실</h4><span>2개/1개</span>
@@ -159,63 +170,88 @@ const FollowBox = () => {
       <FollowBoxContainerThinRow>
         <h4>위치</h4><span>서울특별시 강서구 동촌동</span>
       </FollowBoxContainerThinRow>
-      <hr style={{border:"1px solid lightgray", margin:"15px 0 15px 0"}}/>
-      <FollowBoxContainerBoldRow style={{height:"100px", display:"flex", flexDirection:"column", alignItems:"flex-start", justifyContent:"space-around"}}>
+      <hr style={{ border: "1px solid lightgray", margin: "15px 0" }} />
+      <FollowBoxContainerBoldRow style={{ height: "100px", display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "space-around" }}>
         <h4>노나방룸메를원해요 님</h4>
-        <h5 style={{color:"gray"}}>안녕하세요 룸메이트를 구하고 싶은 <br/>24살 남성입니다</h5>
+        <h5 style={{ color: "gray" }}>안녕하세요 룸메이트를 구하고 싶은 24살 남성입니다</h5>
       </FollowBoxContainerBoldRow>
     </FollowBoxContainer>
   )
-}
+};
 
 const KakaoMap = () => {
   useEffect(() => {
-    const script = document.createElement("script");
-    script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=558d681fe7c83dd239a96533b3e7313f&libraries=services`;
+    // 카카오맵 스크립트가 로드된 후 실행될 함수
+    const script = document.createElement('script');
+    script.src = 'https://dapi.kakao.com/v2/maps/sdk.js?appkey=558d681fe7c83dd239a96533b3e7313f&libraries=services';
     script.async = true;
-    document.head.appendChild(script);
-
     script.onload = () => {
-      window.kakao.maps.load(() => {
-        const container = document.getElementById("map");
-        const options = {
-          center: new window.kakao.maps.LatLng(37.5665, 126.9780),
-          level: 3,
-        };
-        const map = new window.kakao.maps.Map(container, options);
+      // 카카오맵을 초기화하는 코드
+      const { kakao } = window;
+
+      // 지도를 표시할 div를 선택합니다.
+      const container = document.getElementById('map');
+      const options = {
+        center: new kakao.maps.LatLng(33.450701, 126.570667),
+        level: 3,
+      };
+
+      // 지도를 생성합니다
+      const map = new kakao.maps.Map(container, options);
+
+      // 마커를 생성합니다
+      const markerPosition  = new kakao.maps.LatLng(33.450701, 126.570667);
+      const marker = new kakao.maps.Marker({
+        position: markerPosition
       });
+
+      // 마커를 지도에 표시합니다
+      marker.setMap(map);
     };
+
+    document.head.appendChild(script);
   }, []);
 
-  return <div id="map" style={{ width: "100%", height: "100%" }}></div>;
+  return (
+    <div
+      id="map"
+      style={{
+        width: '100%',
+        height: '500px'
+      }}
+    />
+  );
 };
 
 const DetailRoomContent = () => {
+
   return (
     <Container>
-      <Frame> 
+      <Frame>
         <TopFrame>
           <ImageFrameLeft>
-            <img src="https://d1774jszgerdmk.cloudfront.net/1024/HB-iFfzkTLLksHkidjyQM" style={{width:"100%", height:"99%"}} />
+            <img src="https://media.istockphoto.com/id/1496273095/ko/%EC%82%AC%EC%A7%84/%EC%8A%A4%EB%A7%88%ED%8A%B8-tv-%EC%BA%90%EB%B9%84%EB%8B%9B-%EC%86%8C%ED%8C%8C-%EC%84%A0%EC%9D%B8%EC%9E%A5-%EC%8B%9D%EB%AC%BC-%EC%BB%A4%ED%94%BC-%ED%85%8C%EC%9D%B4%EB%B8%94%EC%9D%B4-%EC%9E%88%EB%8A%94-%EA%B1%B0%EC%8B%A4-%EC%9D%B8%ED%85%8C%EB%A6%AC%EC%96%B4.webp?s=2048x2048&w=is&k=20&c=WVD1DhtsF4v5bYTIK-fRwzi9JJgx-4PaCNdA2LHXW4s=" style={{ width: "100%", height: "99%" }} />
           </ImageFrameLeft>
           <ImageFrameRight>
-          <img src="https://d1774jszgerdmk.cloudfront.net/1024/HB-iFfzkTLLksHkidjyQM" style={{width:"49%", height:"49%"}} />
-          <img src="https://d1774jszgerdmk.cloudfront.net/1024/HB-iFfzkTLLksHkidjyQM" style={{width:"49%", height:"49%"}} />
-          <img src="https://d1774jszgerdmk.cloudfront.net/1024/HB-iFfzkTLLksHkidjyQM" style={{width:"49%", height:"49%"}} />
-          <img src="https://d1774jszgerdmk.cloudfront.net/1024/HB-iFfzkTLLksHkidjyQM" style={{width:"49%", height:"49%"}} />
+            <img src="https://media.istockphoto.com/id/1490571644/ko/%EC%82%AC%EC%A7%84/%EB%82%98%EB%AC%B4-%EB%B0%94%EB%8B%A5%EC%9D%B4-%EC%9E%88%EB%8A%94-%EA%B1%B0%EC%8B%A4%EC%9D%98-%EB%94%94%EC%A7%80%ED%84%B8-%EC%83%9D%EC%84%B1-%EC%9D%B4%EB%AF%B8%EC%A7%80.webp?s=2048x2048&w=is&k=20&c=Q2Lh7EMympWZsXqhkDi_zLfl41wd6NvlUUl-QvBVqVQ=" style={{ width: "49%", height: "49%" }} />
+            <img src="https://cdn.pixabay.com/photo/2016/11/14/03/39/interior-1822511_960_720.jpg" style={{ width: "49%", height: "49%" }} />
+            <img src="https://cdn.pixabay.com/photo/2020/01/23/02/29/house-4786769_960_720.jpg" style={{ width: "49%", height: "49%" }} />
+            <img src="https://media.istockphoto.com/id/1885760273/ko/%EC%82%AC%EC%A7%84/%EA%B8%88%EC%83%89%EC%9C%BC%EB%A1%9C-%ED%8F%AC%EC%9D%B8%ED%8A%B8%EB%A5%BC-%EC%A4%80-%EC%9A%95%EC%8B%A4%EA%B3%BC-%EC%B4%88%EB%A1%9D%EC%83%89-%EC%A7%80%ED%95%98%EC%B2%A0-%ED%83%80%EC%9D%BC%EB%A1%9C-%EB%A7%88%EA%B0%90%EB%90%9C-%EC%83%A4%EC%9B%8C%EC%8B%A4.webp?s=2048x2048&w=is&k=20&c=Qm8r-q4Dy7W9LIODxhFJVnoQaCkTE6mt18HUmWSc9Ko=" style={{ width: "49%", height: "49%" }} />
           </ImageFrameRight>
         </TopFrame>
         <BottomFrame>
-          <FollowBox/>
+          <FollowBox />
           <InfoArea>
             <SimpleTextBox>
-              <div style={{width:"35%", display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"space-around"}}>
-                <IoIosInformationCircleOutline fontSize={25}/>
+              <div style={{ width: "35%", display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-around" }}>
+                <IoIosInformationCircleOutline fontSize={25} />
                 <h3>이런 특징이 있어요</h3>
               </div>
-              <div style={{width:"15%", height:"30%" ,border: "1px solid gray", borderRadius:"10px", display:"flex", alignItems:"center", justifyContent:"center", fontWeight:"bold"}}>풀옵션</div>
+              <div style={{ width: "15%", height: "30%", border: "1px solid gray", borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "bold" }}>
+                풀옵션
+              </div>
             </SimpleTextBox>
-            <DetailRowBox leftSide={<h2>가격정보</h2>}/>
+            <DetailRowBox leftSide={<h2>가격정보</h2>} />
             <DetailRowBox leftSide={"월세"} rightSide={"5000/50"} />
             <DetailRowBox leftSide={"관리비"} rightSide={"매월 1만원"} />
             <DetailRowBox leftSide={"주차가능여부"} rightSide={"쌉가능"} />
@@ -223,8 +259,8 @@ const DetailRoomContent = () => {
             <DetailRowBox leftSide={"예상주거비용"} rightSide={"월세 + 관리비 / 2"} />
           </InfoArea>
 
-          <InfoArea style={{marginTop: "100px"}}>
-            <DetailRowBox leftSide={<h2>상세정보</h2>}/>
+          <InfoArea style={{ marginTop: "100px" }}>
+            <DetailRowBox leftSide={<h2>상세정보</h2>} />
             <DetailRowBox leftSide={"층수"} rightSide={"3층"} />
             <DetailRowBox leftSide={"전용/공급면적"} rightSide={"27.72㎡/27.81㎡"} />
             <DetailRowBox leftSide={"방 수/욕실 수"} rightSide={"2개/1개"} />
@@ -232,19 +268,19 @@ const DetailRoomContent = () => {
             <DetailRowBox leftSide={"예상주거비용"} rightSide={"월세 + 관리비 / 2"} />
           </InfoArea>
 
-          
-          <InfoArea style={{marginTop: "100px"}}>
-            <div style={{width:"100%", height:"100px"}}><h2>위치 및 주변시설</h2></div>
-            <div style={{width:"100%", height:"100px"}}><h4>서울특별시 강서구 등촌동</h4></div>
-            <div style={{width:"100%", height:"400px"}}>
-              <KakaoMap />
+          <InfoArea style={{ marginTop: "100px" }}>
+            <div style={{ width: "100%", height: "100px" }}><h2>위치 및 주변시설</h2></div>
+            <div style={{ width: "100%", height: "100px" }}><h4>서울특별시 강서구 등촌동</h4></div>
+            <div id="map" style={{ width: "100%", height: "400px", border: "1px solid black" }}>
+              지도가 왜 안뜨는 걸까? ㅅㅂ
+              <KakaoMap/>
             </div>
           </InfoArea>
         </BottomFrame>
       </Frame>
     </Container>
-  )
-}
+  );
+};
 
 const DetailRoom = () => {
   return <Main children={<DetailRoomContent />} />;

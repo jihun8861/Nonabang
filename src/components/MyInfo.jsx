@@ -44,6 +44,9 @@ const Header = styled.div`
 const UserIcon = styled.img`
   width: 180px;
   height: 180px;
+  cursor: pointer;
+  border-radius: 50%;
+  border: solid 1px #eeeeee;
 `;
 
 const Main = styled.div`
@@ -66,7 +69,6 @@ const InfoTitle = styled.div`
 const InfoBox = styled.div`
   display: flex;
   align-items: center;
-  cursor: pointer;
 `;
 
 const SocialIcon = styled.img`
@@ -76,6 +78,7 @@ const SocialIcon = styled.img`
 
 const InfoText = styled.div`
   color: #656565;
+  font-size: 17px;
 `;
 
 const ArrowIcon = styled(SlArrowRight)`
@@ -274,6 +277,7 @@ const MyInfo = () => {
   const [selectedReason, setSelectedReason] = useState("");
   const [textInput, setTextInput] = useState("");
   const [isChecked, setIsChecked] = useState(false);
+  const [userImage, setUserImage] = useState("/images/user.svg"); // 초기 이미지 설정
 
   useEffect(() => {
     if (isModalOpen) {
@@ -300,13 +304,22 @@ const MyInfo = () => {
     }
 
     if (!isChecked) {
-      toast.error(
-        "안내사항에 동의해주세요."
-      );
+      toast.error("안내사항에 동의해주세요.");
       return;
     }
 
     alert("탈퇴가 완료되었습니다.");
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setUserImage(reader.result); // 이미지 URL 설정
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   return (
@@ -314,7 +327,18 @@ const MyInfo = () => {
       <Frame>
         <FrameBox>
           <Header>
-            <UserIcon src="/images/user.svg" alt="User Icon" />
+            <UserIcon
+              src={userImage}
+              alt="User Icon"
+              onClick={() => document.getElementById("imageInput").click()}
+            />
+            <input
+              type="file"
+              id="imageInput"
+              style={{ display: "none" }}
+              accept="image/*"
+              onChange={handleImageChange}
+            />
           </Header>
           <Main>
             <InfoFrame>
@@ -326,15 +350,13 @@ const MyInfo = () => {
               <InfoTitle>이름</InfoTitle>
               <InfoBox>
                 <InfoText>현지훈</InfoText>
-                <ArrowIcon />
               </InfoBox>
             </InfoFrame>
 
             <InfoFrame>
-              <InfoTitle>비밀번호</InfoTitle>
+              <InfoTitle>이메일</InfoTitle>
               <InfoBox>
-                <InfoText>********</InfoText>
-                <ArrowIcon />
+                <InfoText>ji55hun@oasis.inje.ac.kr</InfoText>
               </InfoBox>
             </InfoFrame>
 
@@ -425,7 +447,6 @@ const MyInfo = () => {
           </ModalContent>
         </ModalOverlay>
       )}
-      <ToastContainer />
     </Container>
   );
 };

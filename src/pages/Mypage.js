@@ -3,8 +3,8 @@ import { Routes, Route, Link, useLocation, Navigate } from "react-router-dom";
 import styled from "styled-components";
 import Main from "../components/Main";
 import MyInfo from "../components/MyInfo";
-import RecentlyView from "../components/RecentlyView";
 import WishList from "../components/WishList";
+import MyPost from "../components/MyPost";
 
 const Container = styled.div`
   width: 100%;
@@ -64,9 +64,9 @@ const Mypage = () => {
                 <h2>찜한 방</h2>
               </HeaderList>
             </Link>
-            <Link to="/Mypage/recentlyview" style={{ textDecoration: 'none' }}>
-              <HeaderList active={location.pathname === "/Mypage/recentlyview"}>
-                <h2>최근본 방</h2>
+            <Link to="/Mypage/mypost" style={{ textDecoration: 'none' }}>
+              <HeaderList active={location.pathname === "/Mypage/mypost"}>
+                <h2>내가 올린 글</h2>
               </HeaderList>
             </Link>
           </HeaderListFrame>
@@ -75,7 +75,7 @@ const Mypage = () => {
             <Route path="/" element={<Navigate to="/Mypage/myinfo" />} />
             <Route path="myinfo" element={<MyInfo />} />
             <Route path="wishlist" element={<WishList />} />
-            <Route path="recentlyview" element={<RecentlyView />} />
+            <Route path="mypost" element={<MyPost />} />
           </Routes>
         </Frame>
       </Container>

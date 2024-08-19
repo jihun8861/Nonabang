@@ -1,3 +1,4 @@
+// index.js (전역 설정)
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
@@ -8,6 +9,8 @@ import Registration from './pages/Registration';
 import SearchRoom from './pages/SearchRoom';
 import DetailRoom from './components/DetailRoom';
 import Mypage from './pages/Mypage';
+import NaverCallback from './pages/NaverRedirect';
+import GoogleCallback from './pages/GoogleRedirect';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ToastContainer } from "react-toastify";
@@ -25,12 +28,14 @@ root.render(
         <Route path="/SearchRoom" element={<SearchRoom/>} />
         <Route path="/DetailRoom" element={<DetailRoom/>} />
         <Route path="/Mypage/*" element={<Mypage />} />
+        <Route path="/NaverCallback" element={<NaverCallback />} />
+        <Route path="/GoogleCallback" element={<GoogleCallback />} />
       </Routes>
 
       <ToastContainer 
         position="top-right" 
         autoClose={4000} 
-        hideProgressBar={true}  // 진행 게이지 숨기기
+        hideProgressBar={true}
         newestOnTop={false} 
         closeOnClick 
         rtl={false} 
@@ -38,7 +43,7 @@ root.render(
         draggable 
         pauseOnHover
         theme="colored"
-        style={{width:"600px", height:"200px", fontWeight:"bold", fontSize:"19px"}}
+        style={{width:"550px", height:"200px", fontWeight:"bold", fontSize:"19px"}}
       />
     </BrowserRouter>
   </React.StrictMode>

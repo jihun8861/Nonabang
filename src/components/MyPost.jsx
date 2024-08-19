@@ -58,14 +58,6 @@ const ImageFrame = styled.div`
   background-size: 100% 100%;
 `;
 
-const HeartIcon = styled(IoMdHeart)`
-  font-size: 28px;
-  position: absolute;
-  top: 18px;
-  right: 18px;
-  cursor: pointer;
-  color: #d84d51;
-`;
 
 const InfoFrame = styled.div`
   width: 100%;
@@ -99,18 +91,16 @@ const DetailText = styled.div`
   }
 `;
 
-const RecentlyView = () => (
+const MyPost = () => (
   <Container>
     <MiniTextFrame>
-      <p>최근 본 방</p><NumberText>2개</NumberText>
+      <p>내가 올린 글</p><NumberText>2개</NumberText>
     </MiniTextFrame>
     <Date>2024.08.11</Date>
     <ListBox>
       {[...Array(2)].map((_, idx) => (
         <FrameBox key={idx}>
-          <ImageFrame>
-            <HeartIcon />
-          </ImageFrame>
+          <ImageFrame/>
           <InfoFrame>
             <h2>월세 1,000/32</h2>
             <p>북구 화명동</p>
@@ -128,4 +118,4 @@ const RecentlyView = () => (
   </Container>
 );
 
-export default RecentlyView;
+export default MyPost;
